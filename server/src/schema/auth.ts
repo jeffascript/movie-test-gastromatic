@@ -1,21 +1,23 @@
-const typeDef = `
-    type User {
-        id: ID!
-        username: String!
-    }
+import { gql } from "apollo-server";
 
-    type Query {
-        currentUser: User!
-    }
+const typeDef = gql`
+  type User {
+    id: ID!
+    username: String!
+  }
 
-    type LoginResponse {
-        token: String
-        user: User
-    }
+  type Query {
+    currentUser: User!
+  }
 
-    type Mutation {
-        register(username: String!, password: String!): User!
-        login(username: String!, password: String!): LoginResponse!
-    }    
+  type LoginResponse {
+    token: String
+    user: User
+  }
+
+  type Mutation {
+    register(username: String!, password: String!): User!
+    login(username: String!, password: String!): LoginResponse!
+  }
 `;
 export default typeDef;

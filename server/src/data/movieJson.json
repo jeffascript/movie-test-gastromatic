@@ -1,0 +1,220 @@
+[
+  {
+    "Title": "Mad Max: Fury Road",
+    "Year": "2015",
+    "Rated": "R",
+    "Released": "15 May 2015",
+    "Runtime": "120 min",
+    "Genre": "Action, Adventure, Sci-Fi, Thriller",
+    "Director": "George Miller",
+    "Writer": "George Miller, Brendan McCarthy, Nick Lathouris",
+    "Actors": "Tom Hardy, Charlize Theron, Nicholas Hoult, Hugh Keays-Byrne",
+    "Plot": "In a post-apocalyptic wasteland, a woman rebels against a tyrannical ruler in search for her homeland with the aid of a group of female prisoners, a psychotic worshiper, and a drifter named Max.",
+    "Language": "English, Russian",
+    "Country": "Australia, South Africa",
+    "Awards": "Won 6 Oscars. Another 236 wins & 228 nominations.",
+    "Poster": "https://m.media-amazon.com/images/M/MV5BN2EwM2I5OWMtMGQyMi00Zjg1LWJkNTctZTdjYTA4OGUwZjMyXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_SX300.jpg",
+    "Ratings": [
+      {
+        "Source": "Internet Movie Database",
+        "Value": "8.1/10"
+      },
+      {
+        "Source": "Rotten Tomatoes",
+        "Value": "97%"
+      },
+      {
+        "Source": "Metacritic",
+        "Value": "90/100"
+      }
+    ],
+    "Metascore": "90",
+    "imdbRating": "8.1",
+    "imdbVotes": "850,874",
+    "imdbID": "tt1392190",
+    "Type": "movie",
+    "DVD": "01 Sep 2015",
+    "BoxOffice": "$129,483,877",
+    "Production": "Warner Bros.",
+    "Website": "N/A",
+    "Response": "True"
+  },
+  {
+    "Title": "Catch Me If You Can",
+    "Year": "2002",
+    "Rated": "PG-13",
+    "Released": "25 Dec 2002",
+    "Runtime": "141 min",
+    "Genre": "Biography, Crime, Drama",
+    "Director": "Steven Spielberg",
+    "Writer": "Jeff Nathanson (screenplay), Frank Abagnale Jr. (book), Stan Redding (book)",
+    "Actors": "Leonardo DiCaprio, Tom Hanks, Christopher Walken, Martin Sheen",
+    "Plot": "A seasoned FBI agent pursues Frank Abagnale Jr. who, before his 19th birthday, successfully forged millions of dollars' worth of checks while posing as a Pan Am pilot, a doctor, and a legal prosecutor.",
+    "Language": "English, French",
+    "Country": "USA, Canada",
+    "Awards": "Nominated for 2 Oscars. Another 16 wins & 44 nominations.",
+    "Poster": "https://m.media-amazon.com/images/M/MV5BMTY5MzYzNjc5NV5BMl5BanBnXkFtZTYwNTUyNTc2._V1_SX300.jpg",
+    "Ratings": [
+      {
+        "Source": "Internet Movie Database",
+        "Value": "8.1/10"
+      },
+      {
+        "Source": "Rotten Tomatoes",
+        "Value": "96%"
+      },
+      {
+        "Source": "Metacritic",
+        "Value": "75/100"
+      }
+    ],
+    "Metascore": "75",
+    "imdbRating": "8.1",
+    "imdbVotes": "790,873",
+    "imdbID": "tt0264464",
+    "Type": "movie",
+    "DVD": "06 May 2003",
+    "BoxOffice": "$164,400,000",
+    "Production": "DreamWorks SKG",
+    "Website": "N/A",
+    "Response": "True"
+  },
+  {
+    "Title": "Crouching Tiger, Hidden Dragon",
+    "Year": "2000",
+    "Rated": "PG-13",
+    "Released": "12 Jan 2001",
+    "Runtime": "120 min",
+    "Genre": "Action, Adventure, Fantasy, Romance",
+    "Director": "Ang Lee",
+    "Writer": "Du Lu Wang (book), Hui-Ling Wang (screenplay), James Schamus (screenplay), Kuo Jung Tsai (screenplay)",
+    "Actors": "Yun-Fat Chow, Michelle Yeoh, Ziyi Zhang, Chen Chang",
+    "Plot": "A young Chinese warrior steals a sword from a famed swordsman and then escapes into a world of romantic adventure with a mysterious man in the frontier of the nation.",
+    "Language": "Mandarin",
+    "Country": "Taiwan, Hong Kong, USA, China",
+    "Awards": "Won 4 Oscars. Another 97 wins & 133 nominations.",
+    "Poster": "https://m.media-amazon.com/images/M/MV5BNDdhMzMxOTctNDMyNS00NTZmLTljNWEtNTc4MDBmZTYxY2NmXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg",
+    "Ratings": [
+      {
+        "Source": "Internet Movie Database",
+        "Value": "7.8/10"
+      },
+      {
+        "Source": "Rotten Tomatoes",
+        "Value": "97%"
+      },
+      {
+        "Source": "Metacritic",
+        "Value": "94/100"
+      }
+    ],
+    "Metascore": "94",
+    "imdbRating": "7.8",
+    "imdbVotes": "248,842",
+    "imdbID": "tt0190332",
+    "Type": "movie",
+    "DVD": "05 Jun 2001",
+    "BoxOffice": "N/A",
+    "Production": "Sony Pictures Classics",
+    "Website": "N/A",
+    "Response": "True"
+  },
+  {
+    "Title": "Tiger King",
+    "Year": "2020",
+    "Rated": "TV-MA",
+    "Released": "20 Mar 2020",
+    "Runtime": "317 min",
+    "Genre": "Documentary, Crime",
+    "Director": "N/A",
+    "Writer": "N/A",
+    "Actors": "John Reinke, Kelci Saffery, John Finlay, Rick Kirkham",
+    "Plot": "A rivalry between big cat eccentrics takes a dark turn when Joe Exotic, a controversial animal park boss, is caught in a murder-for-hire plot.",
+    "Language": "English",
+    "Country": "USA",
+    "Awards": "N/A",
+    "Poster": "https://m.media-amazon.com/images/M/MV5BYzI5MjQ2NzEtN2JmOC00MjE2LWI2NjItYTNjNTJjMjBkOWZkXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_SX300.jpg",
+    "Ratings": [
+      {
+        "Source": "Internet Movie Database",
+        "Value": "7.6/10"
+      }
+    ],
+    "Metascore": "N/A",
+    "imdbRating": "7.6",
+    "imdbVotes": "58,057",
+    "imdbID": "tt11823076",
+    "Type": "series",
+    "totalSeasons": "1",
+    "Response": "True"
+  },
+  {
+    "Title": "A Man Called God",
+    "Year": "2010–",
+    "Rated": "N/A",
+    "Released": "06 Mar 2010",
+    "Runtime": "50 min",
+    "Genre": "Romance",
+    "Director": "N/A",
+    "Writer": "N/A",
+    "Actors": "Il-guk Song, Jin-woong Cho",
+    "Plot": "Michael King vows to revenge his parents' death. He believes that he can use his power as head of an underground drug kingpin to punish those who hurt him. However, his beliefs are shaken ...",
+    "Language": "Korean",
+    "Country": "South Korea",
+    "Awards": "N/A",
+    "Poster": "https://m.media-amazon.com/images/M/MV5BNzQxYjlhZWEtNzUzMy00NjdlLWEyNWItMDRiOWNhNThmNzlhXkEyXkFqcGdeQXVyMzE4MDkyNTA@._V1_SX300.jpg",
+    "Ratings": [
+      {
+        "Source": "Internet Movie Database",
+        "Value": "5.7/10"
+      }
+    ],
+    "Metascore": "N/A",
+    "imdbRating": "5.7",
+    "imdbVotes": "128",
+    "imdbID": "tt2060590",
+    "Type": "series",
+    "totalSeasons": "1",
+    "Response": "True"
+  },
+  {
+    "Title": "The Godfather",
+    "Year": "1972",
+    "Rated": "R",
+    "Released": "24 Mar 1972",
+    "Runtime": "175 min",
+    "Genre": "Crime, Drama",
+    "Director": "Francis Ford Coppola",
+    "Writer": "Mario Puzo (screenplay by), Francis Ford Coppola (screenplay by), Mario Puzo (based on the novel by)",
+    "Actors": "Marlon Brando, Al Pacino, James Caan, Richard S. Castellano",
+    "Plot": "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.",
+    "Language": "English, Italian, Latin",
+    "Country": "USA",
+    "Awards": "Won 3 Oscars. Another 26 wins & 30 nominations.",
+    "Poster": "https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg",
+    "Ratings": [
+      {
+        "Source": "Internet Movie Database",
+        "Value": "9.2/10"
+      },
+      {
+        "Source": "Rotten Tomatoes",
+        "Value": "98%"
+      },
+      {
+        "Source": "Metacritic",
+        "Value": "100/100"
+      }
+    ],
+    "Metascore": "100",
+    "imdbRating": "9.2",
+    "imdbVotes": "1,562,921",
+    "imdbID": "tt0068646",
+    "Type": "movie",
+    "DVD": "09 Oct 2001",
+    "BoxOffice": "N/A",
+    "Production": "Paramount Pictures",
+    "Website": "N/A",
+    "Response": "True"
+  }
+]

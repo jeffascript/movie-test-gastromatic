@@ -12,3 +12,10 @@ export interface UserInfo {
 export interface Context {
   userInfo: UserInfo;
 }
+
+export interface IMovieDesign<T> {
+  name: string;
+  releaseDate: Date;
+  durationPerSecond: number;
+  actorsArray: T;
+}
