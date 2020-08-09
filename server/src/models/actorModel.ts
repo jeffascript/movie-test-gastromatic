@@ -17,7 +17,7 @@ const ActorSchema = new mongoose.Schema(
   },
 );
 
-export const ActorModel = mongoose.model<IActor>(
+export const ActorsModel = mongoose.model<IActor>(
   "Actor",
   ActorSchema,
   "Actors",

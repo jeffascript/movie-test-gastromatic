@@ -20,7 +20,7 @@ const MovieSchema = new mongoose.Schema(
   },
 );
 
-export const MovieModel = mongoose.model<IMovie>(
+export const MoviesModel = mongoose.model<IMovie>(
   "Movie",
   MovieSchema,
   "Movies",
