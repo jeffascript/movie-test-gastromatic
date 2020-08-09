@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 export interface User extends mongoose.Document {
-  _id: string;
+  _id: mongoose.Types.ObjectId;
   username: string;
   password: string;
 }
@@ -13,6 +13,7 @@ const UserSchema = new mongoose.Schema(
   },
   {
     versionKey: false,
+    timestamps: true,
   },
 );
 

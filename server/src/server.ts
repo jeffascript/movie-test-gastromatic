@@ -7,7 +7,7 @@ import resolvers from "./resolvers";
 
 const args = yargs.option("mongo-uri", {
   describe: "Mongo URI",
-  default: "mongodb://localhost:27017/movies",
+  default: "mongodb://localhost:27017/gastromovies",
   type: "string",
   group: "Mongo",
 }).argv;
@@ -26,8 +26,8 @@ async function start() {
       context: ({ req }) => ({
         userInfo: getUserInfo(req.headers.authorization || ""),
       }),
-    }).listen(3000);
-    console.log("GraphQl API running on port 3000.");
+    }).listen(5000);
+    console.log("GraphQl API running on port 5000.");
   } catch (err) {
     console.error(err);
     process.exit(1);
