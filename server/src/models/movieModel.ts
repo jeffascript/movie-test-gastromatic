@@ -1,10 +1,11 @@
+import { IActor } from "./actorModel";
 import mongoose from "mongoose";
 
-interface IMovie extends mongoose.Document {
+export interface IMovie extends mongoose.Document {
   name: string;
   releaseDate: Date;
   durationPerSecond: number;
-  actorsArray: string[];
+  actorsArray: IActor[]; //string[]
 }
 
 const MovieSchema = new mongoose.Schema(
@@ -12,7 +13,7 @@ const MovieSchema = new mongoose.Schema(
     name: { type: String, required: true },
     releaseDate: { type: Date, required: true },
     durationPerSecond: { type: Number, required: true },
-    actorsArray: { type: [String] },
+    actorsArray: [{ type: mongoose.Schema.Types.ObjectId, ref: "Actor" }],
   },
   {
     versionKey: false,
