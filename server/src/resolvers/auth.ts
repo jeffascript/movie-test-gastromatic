@@ -1,9 +1,13 @@
+import { findUserInDBWithContext } from "./../helpers/auth";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { LoginResponse, RegisterResponse, UserInfo, Context } from "../types";
 import { User, UserModel } from "../models";
 
-export async function register(_: void, args: any): Promise<RegisterResponse> {
+export const register = async (
+  _: void,
+  args: any,
+): Promise<RegisterResponse> => {
   const { username, password } = args;
   const existingUser: number = await UserModel.countDocuments({ username });
   if (existingUser) {
@@ -19,9 +23,9 @@ export async function register(_: void, args: any): Promise<RegisterResponse> {
     id: user._id.toHexString(),
     username: user.username,
   };
-}
+};
 
-export async function login(_: void, args: any): Promise<LoginResponse> {
+export const login = async (_: void, args: any): Promise<LoginResponse> => {
   const { username, password } = args;
   const user: User | null = await UserModel.findOne({ username });
   if (!user) {
@@ -41,23 +45,16 @@ export async function login(_: void, args: any): Promise<LoginResponse> {
   return {
     token,
   };
-}
+};
 
-export async function currentUser(
+export const currentUser = async (
   _: void,
   _args: any,
   ctx: Context,
-): Promise<UserInfo> {
-  const { userInfo } = ctx;
-  if (!userInfo) {
-    throw new Error("Not authenticated!");
-  }
-  const user: User | null = await UserModel.findOne({ _id: userInfo.id });
-  if (!user) {
-    throw new Error("Not authenticated!");
-  }
+): Promise<UserInfo> => {
+  const user = await findUserInDBWithContext(ctx);
   return {
     id: user._id.toHexString(),
     username: user.username,
   };
-}
+};
