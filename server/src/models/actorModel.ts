@@ -4,7 +4,7 @@ import { IMovie } from "./index";
 export interface IActor extends mongoose.Document {
   _id: Types.ObjectId;
   name: string;
-  movies: IMovie[];
+  movieList: IMovie[];
 }
 
 const ActorSchema = new mongoose.Schema(
