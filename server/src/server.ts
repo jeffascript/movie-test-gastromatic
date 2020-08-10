@@ -1,4 +1,4 @@
-import { populateData } from "./data/dbPopulate";
+// import { populateData } from "./data/dbPopulate";
 import mongoose from "mongoose";
 import yargs from "yargs";
 import { ApolloServer } from "apollo-server";
@@ -19,7 +19,7 @@ async function start() {
       useUnifiedTopology: true,
       useNewUrlParser: true,
     });
-    await populateData();
+    //await populateData();
     console.log("Connected to DB.");
 
     await new ApolloServer({
