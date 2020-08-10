@@ -1,3 +1,5 @@
+import { IActor, IRating, IMovie } from "./models";
+
 export interface RegisterResponse extends UserInfo {}
 
 export interface LoginResponse {
@@ -13,9 +15,16 @@ export interface Context {
   userInfo: UserInfo;
 }
 
-export interface IMovieDesign<T> {
+interface IRespMovies<A, R> {
   name: string;
   releaseDate: Date;
   durationPerSecond: number;
-  actorsArray: T;
+  ratings: R; //array
+  ratingsAverage: number;
+  numberOfRatings: number;
+  actorsArray: A; //array
 }
+
+export type MovieOrNull = IMovie | null;
+
+export interface IMovieResultDesign extends IRespMovies<IActor[], IRating[]> {}

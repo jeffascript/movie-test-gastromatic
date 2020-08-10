@@ -1,5 +1,5 @@
-import { User, UserModel } from "src/models";
-import { Context } from "src/types";
+import { User, UserModel } from "../models";
+import { Context } from "../types";
 
 export const findUserInDBWithContext = async (ctx: Context): Promise<User> => {
   const { userInfo } = ctx;

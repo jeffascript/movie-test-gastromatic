@@ -1,6 +1,8 @@
+import movieResolverMaps from "./movieResolver";
 import { currentUser, register, login } from "./auth";
+import ratingResolversMaps from "./ratingResolver";
 
-const resolverMap = {
+const authResolverMap = {
   Query: {
     currentUser,
   },
@@ -10,4 +12,4 @@ const resolverMap = {
   },
 };
 
-export default resolverMap;
+export default [authResolverMap, movieResolverMaps, ratingResolversMaps];

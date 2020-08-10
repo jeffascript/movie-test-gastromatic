@@ -7,23 +7,30 @@ const typeDef = gql`
     releaseDate: String!
     durationPerSecond: Int!
     actorsArray: [Actor!]!
-    ratings: [Rating]
+    ratings: [Rating]!
   }
 
   type Rating {
     id: ID!
     count: Int!
     comment: String!
-    ratedBy: [User]!
+    ratedBy: User!
     isRatedByUser: Boolean!
-    # movie: Movie!
+    movie: Movie
     createdAt: String!
+  }
+
+  type MovieAction {
+    movie: Movie!
+    user: User!
+    type: String!
   }
 
   #Using extend since  Query & mutation have been used initially in authSchema
   extend type Query {
     allMovies: [Movie!]!
     oneMovie(id: String!): Movie!
+    ratingsForMovie(movieId: String!): [Rating!]!
   }
 
   extend type Mutation {
@@ -43,6 +50,13 @@ const typeDef = gql`
       durationPerSecond: Int!
       actorsArray: [String!]!
     ): Movie!
+
+    addRating(movieId: String!, count: Int!, comment: String!): Rating!
+  }
+
+  type Subscription {
+    ratingAdded: Rating!
+    movieAction: MovieAction!
   }
 `;
 
