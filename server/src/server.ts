@@ -1,3 +1,4 @@
+import { populateData } from "./data/dbPopulate";
 import mongoose from "mongoose";
 import yargs from "yargs";
 import { ApolloServer } from "apollo-server";
@@ -18,14 +19,17 @@ async function start() {
       useUnifiedTopology: true,
       useNewUrlParser: true,
     });
+    await populateData();
     console.log("Connected to DB.");
 
     await new ApolloServer({
       typeDefs,
       resolvers,
-      context: ({ req }) => ({
-        userInfo: getUserInfo(req.headers.authorization || ""),
-      }),
+      context: async ({ req, connection }) => {
+        return connection
+          ? connection.context
+          : { userInfo: getUserInfo(req.headers.authorization || "") };
+      },
     }).listen(5000);
     console.log("GraphQl API running on port 5000.");
   } catch (err) {

@@ -25,6 +25,13 @@ interface IRespMovies<A, R> {
   actorsArray: A; //array
 }
 
-export type MovieOrNull = IMovie | null;
-
 export interface IMovieResultDesign extends IRespMovies<IActor[], IRating[]> {}
+
+export interface IDataInitialization {
+  name: string;
+  releaseDate: Date;
+  durationPerSecond: number;
+  actorsArray: Array<string>;
+}
+
+export type MovieOrNull = IMovie | null;

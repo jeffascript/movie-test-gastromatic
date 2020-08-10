@@ -1,145 +1,83 @@
-import { IActor, ActorsModel, IMovie, MoviesModel } from "../models";
-import { Context, IMovieResultDesign } from "../types";
+import { IMovie, MoviesModel } from "../models";
+import { Context, IMovieResultDesign, MovieOrNull } from "../types";
 import pubsub from "../pubsub";
+import {
+  formatMovieResponse,
+  findUserInDBWithContext,
+  actorMappingToDB,
+} from "../helpers";
 
-import { findUserInDBWithContext } from "../helpers/auth";
+const allMovies = async (_: void): Promise<IMovieResultDesign[]> => {
+  const moviesFromDB: IMovie[] = await MoviesModel.find({})
+    .populate("actorsArray")
+    .populate({ path: "ratings.ratedBy" });
 
-async function allMovies(_: void): Promise<IMovieResultDesign[]> {
-  return (
-    await MoviesModel.find({})
-      .populate("actorsArray")
-      .populate({ path: "ratings.ratedBy" })
-  ).map(mapMovie);
-}
+  return formatMovieResponse(moviesFromDB);
+};
 
-export async function oneMovie(
+export const oneMovie = async (
   _: void,
   args: any,
-): Promise<IMovieResultDesign> {
+): Promise<IMovieResultDesign> => {
   const movie: IMovie | null = await MoviesModel.findById(args.id)
     .populate("actorsArray")
     .populate({ path: "ratings.ratedBy" });
   if (movie === null) {
     throw new Error("Movie does not exist!");
   }
-  return mapMovie(movie);
-}
-
-// map movie
-export function mapMovie(movie: IMovie): IMovieResultDesign {
-  let movieResult = {
-    id: movie._id.toHexString(),
-    name: movie.name,
-    durationPerSecond: movie.durationPerSecond,
-    releaseDate: movie.releaseDate,
-    actorsArray: movie.actorsArray,
-    ratings: movie.ratings,
-    ratingsAverage: movie.ratings
-      .map((r) => r.count)
-      .reduce((a, b) => a + b, 0),
-    numberOfRatings: movie.ratings.length,
-  };
-  if (movieResult.numberOfRatings > 0) {
-    movieResult.ratingsAverage =
-      movieResult.ratingsAverage / movieResult.numberOfRatings;
-  }
-  return movieResult;
-}
+  return formatMovieResponse(movie);
+};
 
 async function releaseDate(parent: IMovie): Promise<String> {
   return parent.releaseDate.toLocaleDateString();
 }
 
-async function mapNewActors(actorsNames: string[]): Promise<IActor[]> {
-  const actorArray: IActor[] = [];
-  for (let i = 0; i < actorsNames.length; i++) {
-    let existingActor: IActor | null = await ActorsModel.findOne({
-      name: actorsNames[i],
-    });
-    if (existingActor !== null) {
-      actorArray.push(existingActor);
-    } else {
-      let newActor: IActor = new ActorsModel({
-        name: actorsNames[i],
-      });
-      await newActor.save();
-      actorArray.push(newActor);
-    }
-  }
-  return actorArray;
-}
-
-export async function addOneMovie(
+export const createMovie = async (
   _: void,
   args: any,
   ctx: Context,
-): Promise<IMovie> {
+): Promise<IMovie> => {
   const { name, releaseDate, durationPerSecond, actorsArray } = args;
   const user = await findUserInDBWithContext(ctx);
   const existingMovie: number = await MoviesModel.countDocuments({ name });
   if (existingMovie) {
     throw new Error("Movie already in Database!");
   }
-
-  // Map actor names to database entries
-  let actorArray = await mapNewActors(actorsArray);
+  let actorArray = await actorMappingToDB(actorsArray);
 
   const movie: IMovie = new MoviesModel({
     name,
-    releaseDate: new Date(releaseDate),
+    releaseDate: new Date(releaseDate).toUTCString(),
     durationPerSecond,
     actorsArray: actorArray,
   });
   await movie.save();
 
-  for (let i = 0; i < actorArray.length; i++) {
-    actorArray[i].movies.push(movie);
-    // actorArray[i].movieList.push(movie);
-    await actorArray[i].save();
-  }
+  actorArray.forEach(async (oneActor) => {
+    oneActor.movies.push(movie);
+    await oneActor.save();
+  });
 
-  // push change to clients
-  await pubsub.publish("movieAction", {
-    movieAction: {
+  await pubsub.publish("moviePayload", {
+    moviePayload: {
       movie: movie,
       user: user,
       type: "added",
     },
   });
-
   return movie;
-}
+};
 
-async function deleteOneMovie(
+const editOneMovie = async (
   _: void,
   args: any,
   ctx: Context,
-): Promise<boolean> {
-  const { id } = args;
-  const user = await findUserInDBWithContext(ctx);
-  const movie = await MoviesModel.findOneAndDelete({ _id: id });
-
-  if (movie !== null) {
-    // push change to clients
-    await pubsub.publish("movieAction", {
-      movieAction: {
-        movie: movie,
-        user: user,
-        type: "deleted",
-      },
-    });
-    return true;
-  }
-
-  return false;
-}
-
-async function editOneMovie(_: void, args: any, ctx: Context): Promise<IMovie> {
+): Promise<IMovie> => {
   const { id, name, releaseDate, durationSeconds, actorsArray } = args;
   const user = await findUserInDBWithContext(ctx);
-  const movie: IMovie | null = await MoviesModel.findById(id);
+  const movie: MovieOrNull = await MoviesModel.findById(id);
   if (movie === null) {
-    throw new Error("Movie does not exist");
+    throw new Error("Movie not available");
   }
   if (name !== null && name !== undefined) {
     movie.name = name;
@@ -151,22 +89,43 @@ async function editOneMovie(_: void, args: any, ctx: Context): Promise<IMovie> {
     movie.durationPerSecond = durationSeconds;
   }
 
-  // Map actor names to database entries
-  movie.actorsArray = await mapNewActors(actorsArray);
-
+  movie.actorsArray = await actorMappingToDB(actorsArray);
   await movie.save();
 
-  // push change to clients
-  await pubsub.publish("movieAction", {
-    movieAction: {
+  await pubsub.publish("moviePayload", {
+    moviePayload: {
       movie: movie,
       user: user,
-      type: "edited",
+      type: "new changes!",
     },
   });
 
   return movie;
-}
+};
+
+const deleteOneMovie = async (
+  _: void,
+  args: any,
+  ctx: Context,
+): Promise<boolean> => {
+  const { id } = args;
+  const user = await findUserInDBWithContext(ctx);
+  const movie = await MoviesModel.findOneAndDelete({ _id: id });
+
+  if (movie !== null) {
+    await pubsub.publish("moviePayload", {
+      //client emit
+      moviePayload: {
+        movie: movie,
+        user: user,
+        type: "movie has been deleted!!",
+      },
+    });
+    return true;
+  }
+
+  return false;
+};
 
 export default {
   Query: {
@@ -174,15 +133,15 @@ export default {
     oneMovie,
   },
   Mutation: {
-    addOneMovie,
+    createMovie,
     deleteOneMovie,
     editOneMovie,
   },
-  //   Subscription: {
-  //     movieAction: {
-  //       subscribe: () => pubsub.asyncIterator("movieAction"),
-  //     },
-  //   },
+  Subscription: {
+    moviePayload: {
+      subscribe: () => pubsub.asyncIterator("moviePayload"),
+    },
+  },
   Movie: {
     releaseDate,
   },

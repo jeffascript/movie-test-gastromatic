@@ -20,7 +20,7 @@ const typeDef = gql`
     createdAt: String!
   }
 
-  type MovieAction {
+  type MoviePayload {
     movie: Movie!
     user: User!
     type: String!
@@ -30,11 +30,11 @@ const typeDef = gql`
   extend type Query {
     allMovies: [Movie!]!
     oneMovie(id: String!): Movie!
-    ratingsForMovie(movieId: String!): [Rating!]!
+    oneMovieRatings(movieId: String!): [Rating!]!
   }
 
   extend type Mutation {
-    addOneMovie(
+    createMovie(
       name: String!
       releaseDate: String!
       durationPerSecond: Int!
@@ -51,12 +51,12 @@ const typeDef = gql`
       actorsArray: [String!]!
     ): Movie!
 
-    addRating(movieId: String!, count: Int!, comment: String!): Rating!
+    rateTheMovie(movieId: String!, count: Int!, comment: String!): Rating!
   }
 
   type Subscription {
-    ratingAdded: Rating!
-    movieAction: MovieAction!
+    newRatingAlert: Rating!
+    moviePayload: MoviePayload!
   }
 `;
 

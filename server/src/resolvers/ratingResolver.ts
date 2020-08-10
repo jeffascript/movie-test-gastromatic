@@ -1,37 +1,27 @@
 import { MoviesModel, IRating, RatingsModel } from "../models";
 import { Context, MovieOrNull } from "../types";
-
-import pubsub from "../pubsub";
+import pubSub from "../pubsub";
 import { findUserInDBWithContext } from "../helpers/auth";
 
-export async function ratingsForMovie(_: void, args: any): Promise<IRating[]> {
-  const { movieId } = args;
-  const movie: MovieOrNull = await MoviesModel.findById(movieId);
-  if (movie === null) {
-    throw new Error("Movie does not exist!");
-  }
-  return RatingsModel.find({ movie: movie }).populate("user");
-}
-
-export async function addRating(
+export const rateTheMovie = async (
   _: void,
   args: any,
   ctx: Context,
-): Promise<IRating> {
+): Promise<IRating> => {
   const { movieId, count, comment } = args;
 
   const user = await findUserInDBWithContext(ctx);
 
   const movie: MovieOrNull = await MoviesModel.findById(movieId);
   if (movie === null) {
-    throw new Error("Movie does not exist!");
+    throw new Error("Movie not available!");
   }
   const existingRating: number = await RatingsModel.countDocuments({
     movie: movie,
     ratedBy: user,
   });
   if (existingRating >= 1) {
-    throw new Error("Movie already rated!");
+    throw new Error("Movie already rated by you!");
   }
 
   const rating: IRating = new RatingsModel({
@@ -46,24 +36,38 @@ export async function addRating(
   movie.ratings.push(rating);
   await movie.save();
 
-  // push change to clients
-  await pubsub.publish("ratingAdded", {
-    ratingAdded: rating,
+  await pubSub.publish("newRatingAlert", {
+    newRatingAlert: rating,
   });
 
   return rating;
-}
+};
+
+export const oneMovieRatings = async (
+  _: void,
+  args: any,
+): Promise<IRating[]> => {
+  const { movieId } = args;
+  const movie: MovieOrNull = await MoviesModel.findById(movieId);
+  if (movie === null) {
+    throw new Error(
+      "Invalid movied ID! Movie might be unavailble at this time!",
+    );
+  }
+  return RatingsModel.find({ movie: movie }).populate("user");
+};
 
 export default {
-  Mutation: {
-    addRating,
-  },
   Query: {
-    ratingsForMovie,
+    oneMovieRatings,
   },
+  Mutation: {
+    rateTheMovie,
+  },
+
   Subscription: {
-    ratingAdded: {
-      subscribe: () => pubsub.asyncIterator("ratingAdded"),
+    newRatingAlert: {
+      subscribe: () => pubSub.asyncIterator("newRatingAlert"),
     },
   },
 };

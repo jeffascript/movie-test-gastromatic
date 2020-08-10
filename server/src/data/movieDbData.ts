@@ -1,6 +1,6 @@
-import { IMovieDesign } from "./../types";
+import { IDataInitialization } from "./../types";
 
-export const movieData: IMovieDesign<string[]>[] = [
+export const movieData: IDataInitialization[] = [
   {
     name: "Mad Max: Fury Road",
     releaseDate: new Date("15 May 2015"),
