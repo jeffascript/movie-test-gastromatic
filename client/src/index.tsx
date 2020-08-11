@@ -1,17 +1,122 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+import {
+  ApolloProvider,
+  ApolloClient,
+  InMemoryCache,
+  HttpLink,
+  split,
+  ApolloLink,
+  gql,
+  NormalizedCacheObject,
+} from "@apollo/client";
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+import { BrowserRouter } from "react-router-dom";
+
+import { WebSocketLink } from "@apollo/client/link/ws";
+import { getMainDefinition } from "@apollo/client/utilities";
+import { setContext } from "@apollo/client/link/context";
+import { onError } from "@apollo/client/link/error";
+
+let server: any;
+server =
+  server === null || server === undefined
+    ? process.env.API_SERVER
+    : "localhost:4000";
+
+const wsServer: string = "ws://localhost:5000/graphql";
+
+const wsLink = new WebSocketLink({
+  uri: wsServer,
+  options: {
+    reconnect: true,
+  },
+});
+
+const httpLink = new HttpLink({ uri: server });
+
+const asyncAuthLink = setContext((_, { headers, ...context }) => {
+  const token = localStorage.getItem("token");
+  return {
+    headers: {
+      ...headers,
+      ...(token ? { authorization: `Bearer ${token}` } : {}),
+    },
+    ...context,
+  };
+}); // token to local storage
+
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors)
+    graphQLErrors.map(({ message, locations, path }) => {
+      console.log(
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+      );
+
+      if (message === `Not authenticated!`) {
+        client.writeQuery({
+          query: gql`
+            query RemoveToken {
+              token
+            }
+          `,
+          data: {
+            isLoggedIn: false,
+          },
+        });
+        localStorage.removeItem("token");
+      }
+      return null;
+    });
+  if (networkError) {
+    console.log(`[Network error]: ${networkError}`);
+  }
+});
+
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === "OperationDefinition" &&
+      definition.operation === "subscription"
+    );
+  },
+  wsLink,
+  ApolloLink.from([errorLink, asyncAuthLink, httpLink])
 );
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
+  link: splitLink,
+  cache: new InMemoryCache(),
+});
+
+client.writeQuery({
+  query: gql`
+    query GetToken {
+      token
+    }
+  `,
+  data: {
+    isLoggedIn: !!localStorage.getItem("token"),
+  },
+});
+localStorage.removeItem("token");
+
+// cache.writeData({
+//   data: {
+//     isLoggedIn: !!localStorage.getItem("token"),
+//   },
+// });
+
+ReactDOM.render(
+  <React.Fragment>
+    <BrowserRouter>
+      <ApolloProvider client={client}>
+        <App />
+      </ApolloProvider>
+    </BrowserRouter>
+  </React.Fragment>,
+  document.getElementById("root")
+);

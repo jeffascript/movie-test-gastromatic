@@ -1,9 +1,38 @@
 import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
 import { Button } from "antd";
+import { gql, useQuery } from "@apollo/client";
+import {
+  RouteComponentProps,
+  withRouter,
+  Switch,
+  Route,
+  BrowserRouter,
+  RouteProps,
+  Redirect,
+  useHistory,
+} from "react-router-dom";
 
-function App() {
+type TParams = { id: string };
+
+const IS_LOGGED_IN = gql`
+  query GetToken {
+    token @client
+  }
+`;
+
+// query: gql`
+//     query GetToken {
+//       token
+//     }
+//   `,
+//   data: {
+//     isLoggedIn: !!localStorage.getItem("token"),
+//   },
+
+const App = (props: RouteComponentProps<TParams>): JSX.Element => {
+  console.log(props);
+  const { data } = useQuery(IS_LOGGED_IN);
+  console.log(data);
   return (
     <>
       <div className="container">
@@ -11,6 +40,6 @@ function App() {
       </div>
     </>
   );
-}
+};
 
-export default App;
+export default withRouter(App);
