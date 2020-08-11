@@ -20,6 +20,7 @@ const IS_LOGGED_IN = gql`
   }
 `;
 
+type RouterProps = Partial<RouteComponentProps>;
 // query: gql`
 //     query GetToken {
 //       token
@@ -29,7 +30,7 @@ const IS_LOGGED_IN = gql`
 //     isLoggedIn: !!localStorage.getItem("token"),
 //   },
 
-const App = (props: RouteComponentProps<TParams>): JSX.Element => {
+const App = (props: RouterProps): JSX.Element => {
   console.log(props);
   const { data } = useQuery(IS_LOGGED_IN);
   console.log(data);
@@ -37,6 +38,7 @@ const App = (props: RouteComponentProps<TParams>): JSX.Element => {
     <>
       <div className="container">
         <Button> Hello </Button>
+        <h1>nice</h1>
       </div>
     </>
   );
