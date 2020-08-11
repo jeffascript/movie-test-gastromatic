@@ -9,7 +9,6 @@ import {
   HttpLink,
   split,
   ApolloLink,
-  gql,
   NormalizedCacheObject,
 } from "@apollo/client";
 
@@ -19,6 +18,7 @@ import { WebSocketLink } from "@apollo/client/link/ws";
 import { getMainDefinition } from "@apollo/client/utilities";
 import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
+import { IS_LOGGED_IN } from "./graphAPIs/index";
 
 let server: any;
 server =
@@ -34,6 +34,7 @@ const wsLink = new WebSocketLink({
     reconnect: true,
   },
 });
+const cache = new InMemoryCache();
 
 const httpLink = new HttpLink({ uri: server });
 
@@ -52,21 +53,16 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
     graphQLErrors.map(({ message, locations, path }) => {
       console.log(
-        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
       );
 
-      if (message === `Not authenticated!`) {
-        client.writeQuery({
-          query: gql`
-            query RemoveToken {
-              token
-            }
-          `,
+      if (message === "Not authenticated!") {
+        cache.writeQuery({
+          query: IS_LOGGED_IN,
           data: {
             isLoggedIn: false,
           },
         });
-        localStorage.removeItem("token");
       }
       return null;
     });
@@ -84,31 +80,22 @@ const splitLink = split(
     );
   },
   wsLink,
-  ApolloLink.from([errorLink, asyncAuthLink, httpLink])
+  ApolloLink.from([errorLink, asyncAuthLink, httpLink]),
 );
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   link: splitLink,
-  cache: new InMemoryCache(),
+  cache,
 });
 
-client.writeQuery({
-  query: gql`
-    query GetToken {
-      token
-    }
-  `,
+console.log(cache);
+
+cache.writeQuery({
+  query: IS_LOGGED_IN,
   data: {
     isLoggedIn: !!localStorage.getItem("token"),
   },
 });
-localStorage.removeItem("token");
-
-// cache.writeData({
-//   data: {
-//     isLoggedIn: !!localStorage.getItem("token"),
-//   },
-// });
 
 ReactDOM.render(
   <React.Fragment>
@@ -118,5 +105,5 @@ ReactDOM.render(
       </ApolloProvider>
     </BrowserRouter>
   </React.Fragment>,
-  document.getElementById("root")
+  document.getElementById("root"),
 );

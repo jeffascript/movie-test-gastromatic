@@ -1,47 +1,52 @@
-import React from "react";
+import React, { FC } from "react";
 import { Button } from "antd";
-import { gql, useQuery } from "@apollo/client";
-import {
-  RouteComponentProps,
-  withRouter,
-  Switch,
-  Route,
-  BrowserRouter,
-  RouteProps,
-  Redirect,
-  useHistory,
-} from "react-router-dom";
+import { gql, useQuery, useApolloClient } from "@apollo/client";
+import ProtectedRoute, { ProtectedRouteProps } from "./ProtectedRoute";
+import { Route, Switch } from "react-router";
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+import RegistrationPage from "./pages/RegistrationPage";
+import { RouterProps } from "./types";
+import { BrowserRouter } from "react-router-dom";
+import Home from "./pages/Home";
 
-type TParams = { id: string };
+import { IS_LOGGED_IN, GET_CURRENT_USER } from "./graphAPIs";
 
-const IS_LOGGED_IN = gql`
-  query GetToken {
-    token @client
-  }
-`;
+interface IAppState {}
 
-type RouterProps = Partial<RouteComponentProps>;
-// query: gql`
-//     query GetToken {
-//       token
-//     }
-//   `,
-//   data: {
-//     isLoggedIn: !!localStorage.getItem("token"),
-//   },
+interface IAppProps extends RouterProps {}
 
-const App = (props: RouterProps): JSX.Element => {
-  console.log(props);
+const App: FC<IAppProps> = (props): JSX.Element => {
   const { data } = useQuery(IS_LOGGED_IN);
-  console.log(data);
+
+  const isItRegistered = useQuery(GET_CURRENT_USER);
+
+  console.log(data.isLoggedIn, isItRegistered);
+
+  const defaultProtectedRouteProps: ProtectedRouteProps = {
+    isAuthenticated: data.isLoggedIn, //!! isAuthenticated,
+    authenticationPath: "/login",
+    isAllowed: false,
+    restrictedPath: "",
+  };
   return (
     <>
-      <div className="container">
-        <Button> Hello </Button>
-        <h1>nice</h1>
-      </div>
+      <Switch>
+        <ProtectedRoute
+          {...defaultProtectedRouteProps}
+          path={[defaultProtectedRouteProps.restrictedPath, "/gastromovies"]}
+          component={Dashboard}
+          exact={true}
+        />
+
+        <Route exact={true} path="/home" component={Home} />
+
+        <Route exact={true} path="/login" component={Login} />
+
+        <Route exact={true} path="/register" component={RegistrationPage} />
+      </Switch>
     </>
   );
 };
 
-export default withRouter(App);
+export default App;

@@ -6,11 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "cd server && ts-node-dev src/server.ts",
-    "react-start": "cd client && npm start",
-    "dev1": "concurrently \"npm run server\" \"npm run react-start\"",
-    "dev": "concurrently -k -n \"npm run server\" \"npm run app\"",
-    "server1": "node server.js",
-    "app": "wait-on http://localhost:5000/ && cd client && npm start"
+    "react-start": "(cd client && npm start)",
+    "devs": "concurrently \"npm run server1\" \"npm run app\"",
+    "server1": "cd server && npm run dev",
+    "app": "wait-on tcp:5000 && cd client && npm start"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +18,7 @@
   "dependencies": {
     "apollo-boost": "^0.4.9",
     "concurrently": "^5.3.0",
+    "ts-node-dev": "^1.0.0-pre.56",
     "wait-on": "^5.2.0"
   },
   "repository": {
