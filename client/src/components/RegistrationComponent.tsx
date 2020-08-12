@@ -1,13 +1,15 @@
 import React, { useState, useCallback } from "react";
-import { ApolloClient, useApolloClient, useMutation } from "@apollo/client";
-import { USER_LOGIN } from "../graphAPIs";
+import { useMutation } from "@apollo/client";
+import { USER_REGISTER } from "../graphAPIs";
 
-import { Form, Spin } from "antd";
+import { Spin } from "antd";
 
 import "./LoginForm.css";
 import { openNotification } from "./Notification";
 
 import { setTimeout } from "timers";
+import { Redirect } from "react-router-dom";
+import RegFormComponent from "./RegisterForm";
 
 interface IRegistrationComponentProps {}
 
@@ -16,48 +18,37 @@ export interface IRegistrationComponentState {
   password?: string;
 }
 
-const layout = {
-  labelCol: { span: 8 },
-  wrapperCol: { span: 16 },
-};
-const tailLayout = {
-  wrapperCol: { offset: 8, span: 16 },
-};
+// const layout = {
+//   labelCol: { span: 8 },
+//   wrapperCol: { span: 16 },
+// };
+// const tailLayout = {
+//   wrapperCol: { offset: 8, span: 16 },
+// };
 
 const RegistrationComponent = (props: IRegistrationComponentProps) => {
-  const [loginInput, setLoginInput] = useState<IRegistrationComponentState>();
+  const [registerComplete, setRegisterComplete] = useState<boolean>(false);
 
-  const client: ApolloClient<any> = useApolloClient();
-
-  const [login, { loading, error }] = useMutation(USER_LOGIN, {
+  const [RegisterUser, { loading }] = useMutation(USER_REGISTER, {
     onCompleted({ login }) {
       console.log(login);
-      localStorage.setItem("token", login.token);
-
-      client.writeQuery({
-        query: USER_LOGIN,
-        data: {
-          isLoggedIn: true,
-        },
-      });
+      setRegisterComplete(true);
     },
   });
 
-  const onFinish = useCallback(
-    (value: any) => {
-      setLoginInput(value);
-
-      if (value) {
-        setData(value);
-      } else {
-        setLoginInput({} as IRegistrationComponentState);
-      }
-    },
-    [loginInput],
-  );
+  const onFinish = useCallback((value: any) => {
+    if (value) {
+      setData(value);
+    } else {
+      openNotification({
+        message: "Check your input fields",
+        type: "warning",
+      });
+    }
+  }, []);
 
   const setData = async (loginInput: any) => {
-    await login({
+    await RegisterUser({
       variables: {
         username: loginInput.username,
         password: loginInput.password,
@@ -66,7 +57,7 @@ const RegistrationComponent = (props: IRegistrationComponentProps) => {
       .then(
         (res) =>
           openNotification({
-            message: "Sign-In successful",
+            message: "Registration successful",
             type: "success",
           }),
         (error) =>
@@ -87,7 +78,8 @@ const RegistrationComponent = (props: IRegistrationComponentProps) => {
 
   return (
     <>
-      <Form onFinish={onFinish} />
+      {registerComplete && <Redirect to="/login" />}
+      <RegFormComponent onFinish={onFinish} />
     </>
   );
 };

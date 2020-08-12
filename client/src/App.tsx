@@ -1,14 +1,12 @@
 import React, { FC } from "react";
-import { Button } from "antd";
-import { gql, useQuery, useApolloClient } from "@apollo/client";
+
+import { useQuery } from "@apollo/client";
 import ProtectedRoute, { ProtectedRouteProps } from "./ProtectedRoute";
 import { Route, Switch } from "react-router";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import RegistrationPage from "./pages/RegistrationPage";
 import { RouterProps } from "./types";
-import { BrowserRouter } from "react-router-dom";
-import Home from "./pages/Home";
 
 import { IS_LOGGED_IN, GET_CURRENT_USER } from "./graphAPIs";
 
@@ -39,11 +37,9 @@ const App: FC<IAppProps> = (props): JSX.Element => {
           exact={true}
         />
 
-        <Route exact={true} path="/home" component={Home} />
+        <Route exact={true} path="/login" component={Login} />
 
-        <Route exact={true} path={["/login", "/register"]} component={Login} />
-
-        <Route exact={true} path="/registers" component={RegistrationPage} />
+        <Route exact={true} path="/register" component={RegistrationPage} />
       </Switch>
     </>
   );

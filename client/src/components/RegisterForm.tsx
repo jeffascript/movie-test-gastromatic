@@ -3,24 +3,13 @@ import { Form, Input, Button } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import "./LoginForm.css";
 import { Link } from "react-router-dom";
-import { ILoginState } from "./LoginComponent";
 
-interface IFormProps extends ILoginState {
-  //   forRegister?: boolean;
-  onFinish?: any;
-  colon: boolean;
+interface IRegFormProps {
+  onFinish: any;
 }
 
-// const layout = {
-//   labelCol: { span: 8 },
-//   wrapperCol: { span: 16 },
-// };
-// const tailLayout = {
-//   wrapperCol: { offset: 8, span: 16 },
-// };
-
-const FormComponent = (props: Partial<IFormProps>) => {
-  const { onFinish, colon } = props;
+const RegFormComponent = (props: Partial<IRegFormProps>) => {
+  const { onFinish } = props;
 
   return (
     <>
@@ -41,6 +30,7 @@ const FormComponent = (props: Partial<IFormProps>) => {
         </Form.Item>
         <Form.Item
           name="password"
+          hasFeedback
           rules={[{ required: true, message: "Please input your Password!" }]}
         >
           <Input
@@ -50,21 +40,45 @@ const FormComponent = (props: Partial<IFormProps>) => {
           />
         </Form.Item>
 
+        <Form.Item
+          name="confirm"
+          dependencies={["password"]}
+          rules={[
+            { required: true, message: "Confirm your Password!" },
+            ({ getFieldValue }) => ({
+              validator(rule, value) {
+                if (!value || getFieldValue("password") === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(
+                  "The two passwords that you entered do not match!",
+                );
+              },
+            }),
+          ]}
+        >
+          <Input
+            prefix={<LockOutlined className="site-form-item-icon" />}
+            type="password"
+            placeholder="Confirm Password"
+          />
+        </Form.Item>
+
         <Form.Item>
           <Button
             type="primary"
             htmlType="submit"
             className="login-form-button"
           >
-            Log in
+            Register
           </Button>
 
           <span
             className="centertile"
             style={{ padding: "1em", display: "inline-list-item" }}
           >
-            New User ? &nbsp;
-            <Link to="/register">Register</Link>
+            Already have an account?&nbsp;
+            <Link to="/login">Login Now</Link>
           </span>
         </Form.Item>
       </Form>
@@ -72,4 +86,4 @@ const FormComponent = (props: Partial<IFormProps>) => {
   );
 };
 
-export default FormComponent;
+export default RegFormComponent;

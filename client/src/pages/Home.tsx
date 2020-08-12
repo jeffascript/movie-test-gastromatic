@@ -1,48 +1,32 @@
-import React, { FC } from "react";
-import { useQuery } from "@apollo/client";
+import React from "react";
 
-interface IHomeProps {}
+import { Layout } from "antd";
 
-interface IHomeState {}
+const { Header, Content } = Layout;
 
-const Home: FC<IHomeProps> = (props): JSX.Element => {
-  return (
-    <div>
-      <h1>Welcome</h1>
-    </div>
-  );
+const withHome = (PropComponent: any) => {
+  const withHome = (props: object) => {
+    return (
+      <>
+        <Layout>
+          <Header>
+            <h1 className="centertitle" style={{ color: "gray" }}>
+              Welcome to GastroMovie Gallery!
+            </h1>
+          </Header>
+          <Content>
+            <div className="centertitle">
+              <div className="center">
+                <PropComponent {...props} />
+              </div>
+            </div>
+          </Content>
+        </Layout>
+      </>
+    );
+  };
+
+  return withHome;
 };
 
-// const {
-//   data: movieData,
-//   error: movieError,
-//   loading: movieLoading,
-// } = useQuery<GetMovieById>(GET_MOVIE_BY_ID, {variables: {id: props.movie.id}});
-
-// const { data } = useQuery<GetCurrentUser>(GET_CURRENT_USER);
-//     let userId = data ? data.currentUser.id : "";
-
-// const client = useApolloClient();
-// const [login, {loading, error}] = useMutation(LOGIN_USER,
-//     {
-//         onCompleted({login}) {
-//             localStorage.setItem("token", login.token);
-//             client.writeData({data: {isLoggedIn: true}});
-//         }
-//     });
-
-// login({
-//   variables: {
-//       username: inputs.username,
-//       password: inputs.password
-//   }
-// }).catch(error => console.log(error));
-
-// const [inputs, setInputs] = useState({
-//     username: "",
-//     usernameError: "",
-//     password: "",
-//     passwordError: ""
-// });
-
-export default Home;
+export default withHome;

@@ -1,10 +1,9 @@
 import React, { FC } from "react";
 
-import { Layout } from "antd";
 import LoginComponent from "../components/LoginComponent";
 import { useLocation } from "react-router-dom";
-import RegistrationComponent from "../components/RegistrationComponent";
-const { Header, Footer, Sider, Content } = Layout;
+
+import withHome from "./Home";
 
 interface ILoginProps {}
 
@@ -13,26 +12,9 @@ const Login: FC<ILoginProps> = (props): JSX.Element => {
 
   return (
     <>
-      <Layout>
-        <Header>
-          <h1 className="centertitle" style={{ color: "gray" }}>
-            Welcome to GastroMovie Gallery!
-          </h1>
-        </Header>
-        <Content>
-          <div className="centertitle">
-            <div className="center">
-              {location.pathname == "/login" ? (
-                <LoginComponent />
-              ) : (
-                <RegistrationComponent />
-              )}
-            </div>
-          </div>
-        </Content>
-      </Layout>
+      <LoginComponent />
     </>
   );
 };
 
-export default Login;
+export default withHome(Login);
