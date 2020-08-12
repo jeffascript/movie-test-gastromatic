@@ -3,7 +3,7 @@ import React, { FC } from "react";
 import LoginComponent from "../components/LoginComponent";
 import { useLocation } from "react-router-dom";
 
-import withHome from "./Home";
+import withHome from "./WithHome";
 
 interface ILoginProps {}
 

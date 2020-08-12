@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import RegistrationComponent from "../components/RegistrationComponent";
-import withHome from "./Home";
+import withHome from "./WithHome";
 
 interface IRegistrationProps {}
 

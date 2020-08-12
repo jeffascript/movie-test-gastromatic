@@ -18,14 +18,6 @@ export interface IRegistrationComponentState {
   password?: string;
 }
 
-// const layout = {
-//   labelCol: { span: 8 },
-//   wrapperCol: { span: 16 },
-// };
-// const tailLayout = {
-//   wrapperCol: { offset: 8, span: 16 },
-// };
-
 const RegistrationComponent = (props: IRegistrationComponentProps) => {
   const [registerComplete, setRegisterComplete] = useState<boolean>(false);
 

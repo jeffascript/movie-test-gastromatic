@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { ApolloClient, useApolloClient, useMutation } from "@apollo/client";
 import { USER_LOGIN } from "../graphAPIs";
 
@@ -9,6 +9,7 @@ import { openNotification } from "./Notification";
 
 import { setTimeout } from "timers";
 import FormComponent from "./Form";
+import { useHistory } from "react-router-dom";
 
 interface ILoginProps {}
 
@@ -17,16 +18,9 @@ export interface ILoginState {
   password?: string;
 }
 
-const layout = {
-  labelCol: { span: 8 },
-  wrapperCol: { span: 16 },
-};
-const tailLayout = {
-  wrapperCol: { offset: 8, span: 16 },
-};
-
 const LoginComponent = (props: ILoginProps) => {
   const [loginInput, setLoginInput] = useState<ILoginState>();
+  const [loginSuccess, setLoginSuccess] = useState<boolean>(false);
 
   const client: ApolloClient<any> = useApolloClient();
 
@@ -50,6 +44,7 @@ const LoginComponent = (props: ILoginProps) => {
 
       if (value) {
         setData(value);
+        setLoginInput(value);
       } else {
         setLoginInput({} as ILoginState);
       }
@@ -65,11 +60,15 @@ const LoginComponent = (props: ILoginProps) => {
       },
     })
       .then(
-        (res) =>
-          openNotification({
-            message: "Sign-In successful",
-            type: "success",
-          }),
+        (res) => {
+          return (
+            openNotification({
+              message: "Sign-In successful",
+              type: "success",
+            }),
+            setLoginSuccess(true)
+          );
+        },
 
         (error) =>
           openNotification({
@@ -90,6 +89,12 @@ const LoginComponent = (props: ILoginProps) => {
       return <Spin tip="Loading..." size="large" />;
     }, 1000);
   }
+
+  const history = useHistory();
+  useEffect(() => {
+    loginSuccess ||
+      (localStorage.getItem("token") && history.push("/gastromovies"));
+  }, [loginSuccess, history]);
 
   return (
     <>

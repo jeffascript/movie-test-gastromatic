@@ -1,11 +1,17 @@
 import React from "react";
+import withHome from "./WithHome";
+import DashBoardComponent from "../components/DashBoardComponent";
 
-const Dashboard = () => {
+export interface IDashBoardProps {}
+
+export interface IDashBoardState {}
+
+const Dashboard = (props: IDashBoardProps) => {
   return (
     <div>
-      <h3>movie list</h3>
+      <DashBoardComponent />
     </div>
   );
 };
 
-export default Dashboard;
+export default withHome(Dashboard);
