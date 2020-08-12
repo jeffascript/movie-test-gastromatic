@@ -20,11 +20,7 @@ import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
 import { IS_LOGGED_IN } from "./graphAPIs/index";
 
-let server: any;
-server =
-  server === null || server === undefined
-    ? process.env.API_SERVER
-    : "localhost:4000";
+const server: string = "http://localhost:5000";
 
 const wsServer: string = "ws://localhost:5000/graphql";
 
@@ -47,7 +43,7 @@ const asyncAuthLink = setContext((_, { headers, ...context }) => {
     },
     ...context,
   };
-}); // token to local storage
+}); // headers set for request
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)

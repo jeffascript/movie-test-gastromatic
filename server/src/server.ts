@@ -23,6 +23,10 @@ async function start() {
     console.log("Connected to DB.");
 
     await new ApolloServer({
+      cors: {
+        origin: "*",
+        credentials: true,
+      },
       typeDefs,
       resolvers,
       context: async ({ req, connection }) => {

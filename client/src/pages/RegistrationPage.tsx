@@ -1,7 +1,14 @@
-import React from "react";
+import React, { FC } from "react";
+import RegistrationComponent from "../components/RegistrationComponent";
 
-const RegistrationPage = () => {
-  return <div></div>;
+interface IRegistrationProps {}
+
+const RegistrationPage: FC<IRegistrationProps> = (props): JSX.Element => {
+  return (
+    <>
+      <RegistrationComponent />
+    </>
+  );
 };
 
 export default RegistrationPage;

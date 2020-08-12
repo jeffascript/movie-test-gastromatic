@@ -1,7 +1,7 @@
 /*
 
 const typeDef = gql`
-type Actor {
+type Actor { 
   id: ID!
   name: String!
 }

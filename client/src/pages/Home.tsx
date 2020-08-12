@@ -13,6 +13,12 @@ const Home: FC<IHomeProps> = (props): JSX.Element => {
   );
 };
 
+// const {
+//   data: movieData,
+//   error: movieError,
+//   loading: movieLoading,
+// } = useQuery<GetMovieById>(GET_MOVIE_BY_ID, {variables: {id: props.movie.id}});
+
 // const { data } = useQuery<GetCurrentUser>(GET_CURRENT_USER);
 //     let userId = data ? data.currentUser.id : "";
 
@@ -24,6 +30,13 @@ const Home: FC<IHomeProps> = (props): JSX.Element => {
 //             client.writeData({data: {isLoggedIn: true}});
 //         }
 //     });
+
+// login({
+//   variables: {
+//       username: inputs.username,
+//       password: inputs.password
+//   }
+// }).catch(error => console.log(error));
 
 // const [inputs, setInputs] = useState({
 //     username: "",

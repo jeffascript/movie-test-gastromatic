@@ -41,9 +41,9 @@ const App: FC<IAppProps> = (props): JSX.Element => {
 
         <Route exact={true} path="/home" component={Home} />
 
-        <Route exact={true} path="/login" component={Login} />
+        <Route exact={true} path={["/login", "/register"]} component={Login} />
 
-        <Route exact={true} path="/register" component={RegistrationPage} />
+        <Route exact={true} path="/registers" component={RegistrationPage} />
       </Switch>
     </>
   );
