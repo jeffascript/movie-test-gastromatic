@@ -10,7 +10,7 @@ const withHome = (PropComponent: any) => {
       <>
         <Layout>
           <Header>
-            <h1 className="centertitle" style={{ color: "gray" }}>
+            <h1 className="center" style={{ color: "gray" }}>
               Welcome to GastroMovie Gallery!
             </h1>
           </Header>

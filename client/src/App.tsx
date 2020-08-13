@@ -8,7 +8,7 @@ import Dashboard from "./pages/Dashboard";
 import RegistrationPage from "./pages/RegistrationPage";
 import { RouterProps } from "./types";
 
-import { IS_LOGGED_IN, GET_CURRENT_USER } from "./graphAPIs";
+import { IS_LOGGED_IN } from "./graphAPIs";
 
 interface IAppState {}
 
@@ -16,10 +16,6 @@ interface IAppProps extends RouterProps {}
 
 const App: FC<IAppProps> = (props): JSX.Element => {
   const { data } = useQuery(IS_LOGGED_IN);
-
-  const isItRegistered = useQuery(GET_CURRENT_USER);
-
-  console.log(data.isLoggedIn, isItRegistered);
 
   const defaultProtectedRouteProps: ProtectedRouteProps = {
     isAuthenticated: data.isLoggedIn, //!! isAuthenticated,

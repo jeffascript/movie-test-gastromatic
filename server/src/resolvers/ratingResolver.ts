@@ -1,3 +1,5 @@
+// import mongoose from "mongoose";
+
 import { MoviesModel, IRating, RatingsModel } from "../models";
 import { Context, MovieOrNull } from "../types";
 import pubSub from "../pubsub";
@@ -16,13 +18,33 @@ export const rateTheMovie = async (
   if (movie === null) {
     throw new Error("Movie not available!");
   }
-  const existingRating: number = await RatingsModel.countDocuments({
-    movie: movie,
+
+  // const ObjectId = mongoose.Types.ObjectId;
+
+  // const newid: any = user._id;
+
+  const ratedMovie: IRating | null = await RatingsModel.findOne({
     ratedBy: user,
-  });
-  if (existingRating >= 1) {
+    movie: movieId,
+  }).exec();
+
+  if (ratedMovie) {
     throw new Error("Movie already rated by you!");
   }
+
+  // const isMovieRated = await RatingsModel.find({ movie: movieId})
+
+  //isMovieRated.some(a => a.ratedBy === newid)
+
+  // movie.ratings.some((a) => a._id === isMovieRated.ratedBy); //===id of ratings
+
+  // const existingRating: number = await RatingsModel.countDocuments({
+  //   movie: movie,
+  //   ratedBy: user,
+  // });
+  // if (existingRating >= 1) {
+  //   throw new Error("Movie already rated by you!");
+  // }
 
   const rating: IRating = new RatingsModel({
     count,

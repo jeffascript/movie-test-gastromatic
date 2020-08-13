@@ -1,5 +1,7 @@
 import { gql } from "@apollo/client";
 
+//Auth & User
+
 export const IS_LOGGED_IN = gql`
   query IsUserLoggedIn {
     isLoggedIn @client
@@ -24,7 +26,7 @@ export const USER_REGISTER = gql`
 `;
 
 export const GET_CURRENT_USER = gql`
-  query currentUser {
+  query GetCurrentUser {
     currentUser {
       id
       username

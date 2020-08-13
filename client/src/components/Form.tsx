@@ -8,7 +8,6 @@ import { ILoginState } from "./LoginComponent";
 interface IFormProps extends ILoginState {
   //   forRegister?: boolean;
   onFinish?: any;
-  colon: boolean;
 }
 
 // const layout = {
@@ -20,7 +19,7 @@ interface IFormProps extends ILoginState {
 // };
 
 const FormComponent = (props: Partial<IFormProps>) => {
-  const { onFinish, colon } = props;
+  const { onFinish } = props;
 
   return (
     <>

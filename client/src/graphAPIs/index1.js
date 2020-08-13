@@ -41,6 +41,8 @@ const typeDef = gql`
     durationPerSecond: Int!
     actorsArray: [Actor!]!
     ratings: [Rating]!
+    numberOfRatings: Int!
+    ratingsAverage: Float!
   }
 
   type Rating {

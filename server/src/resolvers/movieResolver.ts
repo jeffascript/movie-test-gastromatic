@@ -5,6 +5,7 @@ import {
   formatMovieResponse,
   findUserInDBWithContext,
   actorMappingToDB,
+  reMappedResponse,
 } from "../helpers";
 
 const allMovies = async (_: void): Promise<IMovieResultDesign[]> => {
@@ -12,14 +13,14 @@ const allMovies = async (_: void): Promise<IMovieResultDesign[]> => {
     .populate("actorsArray")
     .populate({ path: "ratings.ratedBy" });
 
-  return formatMovieResponse(moviesFromDB);
+  return reMappedResponse(moviesFromDB);
 };
 
 export const oneMovie = async (
   _: void,
   args: any,
 ): Promise<IMovieResultDesign> => {
-  const movie: IMovie | null = await MoviesModel.findById(args.id)
+  const movie: MovieOrNull = await MoviesModel.findById(args.id)
     .populate("actorsArray")
     .populate({ path: "ratings.ratedBy" });
   if (movie === null) {
@@ -28,9 +29,9 @@ export const oneMovie = async (
   return formatMovieResponse(movie);
 };
 
-async function releaseDate(parent: IMovie): Promise<String> {
-  return parent.releaseDate.toLocaleDateString();
-}
+// async function releaseDate(parent: IMovie): Promise<String> {
+//   return parent.releaseDate.toLocaleDateString();
+// }
 
 export const createMovie = async (
   _: void,
@@ -142,7 +143,7 @@ export default {
       subscribe: () => pubsub.asyncIterator("moviePayload"),
     },
   },
-  Movie: {
-    releaseDate,
-  },
+  // Movie: {
+  //   releaseDate,
+  // },
 };

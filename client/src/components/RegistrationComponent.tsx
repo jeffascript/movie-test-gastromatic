@@ -8,8 +8,9 @@ import "./LoginForm.css";
 import { openNotification } from "./Notification";
 
 import { setTimeout } from "timers";
-import { Redirect } from "react-router-dom";
+
 import RegFormComponent from "./RegisterForm";
+import { useHistory } from "react-router-dom";
 
 interface IRegistrationComponentProps {}
 
@@ -19,12 +20,12 @@ export interface IRegistrationComponentState {
 }
 
 const RegistrationComponent = (props: IRegistrationComponentProps) => {
-  const [registerComplete, setRegisterComplete] = useState<boolean>(false);
+  const history = useHistory();
 
-  const [RegisterUser, { loading }] = useMutation(USER_REGISTER, {
+  const [RegisterUser, { loading, data, error }] = useMutation(USER_REGISTER, {
     onCompleted({ login }) {
       console.log(login);
-      setRegisterComplete(true);
+      history.push("/login");
     },
   });
 
@@ -70,7 +71,6 @@ const RegistrationComponent = (props: IRegistrationComponentProps) => {
 
   return (
     <>
-      {registerComplete && <Redirect to="/login" />}
       <RegFormComponent onFinish={onFinish} />
     </>
   );

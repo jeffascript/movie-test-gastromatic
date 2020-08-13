@@ -1,11 +1,11 @@
 import { IMovie, IActor, ActorsModel } from "../models";
 import { IMovieResultDesign } from "../types";
 
-export const formatMovieResponse = (data: any) => {
-  return data.map(reMappedResponse);
+export const reMappedResponse = (data: any) => {
+  return data.map(formatMovieResponse);
 };
 
-export const reMappedResponse = (movie: IMovie): IMovieResultDesign => {
+export const formatMovieResponse = (movie: IMovie): IMovieResultDesign => {
   let movieResult = {
     id: movie._id.toHexString(),
     name: movie.name,
@@ -15,8 +15,8 @@ export const reMappedResponse = (movie: IMovie): IMovieResultDesign => {
     ratings: movie.ratings,
 
     ratingsAverage: movie.ratings
-      .map((r) => r.count)
-      .reduce((a, b) => a + b, 0),
+      .map((rating) => rating.count)
+      .reduce((accumulator, currentValue) => accumulator + currentValue, 0),
     numberOfRatings: movie.ratings.length,
   };
   if (movieResult.numberOfRatings > 0) {

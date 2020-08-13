@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, FC } from "react";
 import { ApolloClient, useApolloClient, useMutation } from "@apollo/client";
 import { USER_LOGIN } from "../graphAPIs";
 
@@ -11,22 +11,25 @@ import { setTimeout } from "timers";
 import FormComponent from "./Form";
 import { useHistory } from "react-router-dom";
 
-interface ILoginProps {}
-
-export interface ILoginState {
-  username?: string;
-  password?: string;
+interface ILoginCompProps {
+  //   welcomeUserName?: string;
 }
 
-const LoginComponent = (props: ILoginProps) => {
-  const [loginInput, setLoginInput] = useState<ILoginState>();
-  const [loginSuccess, setLoginSuccess] = useState<boolean>(false);
+export interface ILoginState {
+  username: string;
+  password: string;
+}
 
+const LoginComponent: FC<ILoginCompProps> = (props) => {
+  const [loginInput, setLoginInput] = useState<ILoginState>();
+
+  const history = useHistory();
   const client: ApolloClient<any> = useApolloClient();
 
   const [login, { loading, error }] = useMutation(USER_LOGIN, {
     onCompleted({ login }) {
       console.log(login);
+
       localStorage.setItem("token", login.token);
 
       client.writeQuery({
@@ -35,6 +38,8 @@ const LoginComponent = (props: ILoginProps) => {
           isLoggedIn: true,
         },
       });
+
+      history.push("/gastromovies");
     },
   });
 
@@ -61,13 +66,11 @@ const LoginComponent = (props: ILoginProps) => {
     })
       .then(
         (res) => {
-          return (
-            openNotification({
-              message: "Sign-In successful",
-              type: "success",
-            }),
-            setLoginSuccess(true)
-          );
+          return openNotification({
+            message: ` Welcome Back`,
+            type: "success",
+            description: "Sign-In successful",
+          });
         },
 
         (error) =>
@@ -89,12 +92,6 @@ const LoginComponent = (props: ILoginProps) => {
       return <Spin tip="Loading..." size="large" />;
     }, 1000);
   }
-
-  const history = useHistory();
-  useEffect(() => {
-    loginSuccess ||
-      (localStorage.getItem("token") && history.push("/gastromovies"));
-  }, [loginSuccess, history]);
 
   return (
     <>

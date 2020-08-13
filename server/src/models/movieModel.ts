@@ -8,6 +8,7 @@ export interface IRating extends mongoose.Document {
   ratedBy: User;
   isRatedByUser: boolean;
   movie: IMovie;
+  createdAt?: Date;
 }
 
 export interface IMovie extends mongoose.Document {
@@ -27,10 +28,10 @@ const RatingSchema = new mongoose.Schema(
     count: { type: Number, required: true },
     comment: { type: String, required: false },
     isRatedByUser: { type: Boolean, default: false },
+    createdAt: { type: Date, default: Date.now }, //alternatively, can add timestamps: true for this
   },
   {
     versionKey: false,
-    timestamps: true,
   },
 );
 
