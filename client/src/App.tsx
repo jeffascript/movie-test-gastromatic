@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import { useQuery } from "@apollo/client";
 import ProtectedRoute, { ProtectedRouteProps } from "./ProtectedRoute";
 import { Route, Switch } from "react-router";

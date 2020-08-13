@@ -8,10 +8,15 @@ export interface IDashBoardState {}
 
 const Dashboard = (props: IDashBoardProps) => {
   return (
-    <div>
-      <DashBoardComponent />
+    <div className="container">
+      <div className="row">
+        <div className="col">
+          {" "}
+          <DashBoardComponent />
+        </div>
+      </div>
     </div>
   );
 };
 
-export default withHome(Dashboard);
+export default Dashboard;
