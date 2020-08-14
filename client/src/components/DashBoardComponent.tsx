@@ -1,39 +1,100 @@
-import React from "react";
+import React, { FC, useState } from "react";
+import { Table } from "antd";
+import {
+  SortableContainer,
+  SortableElement,
+  SortableHandle,
+} from "react-sortable-hoc";
+import { MenuOutlined } from "@ant-design/icons";
+import arrayMove from "array-move";
 
-import { Table, Tag, Space } from "antd";
+const DragHandle = SortableHandle(() => (
+  <MenuOutlined style={{ cursor: "pointer", color: "#999" }} />
+));
 
-const { Column, ColumnGroup } = Table;
+const columns = [
+  {
+    title: "Sort",
+    dataIndex: "sort",
+    width: 30,
+    className: "drag-visible",
+    render: () => <DragHandle />,
+  },
+  {
+    title: "Name",
+    dataIndex: "name",
+    className: "drag-visible",
+  },
+  {
+    title: "Age",
+    dataIndex: "age",
+  },
+  {
+    title: "Address",
+    dataIndex: "address",
+  },
+];
+// Name
+// o Release date
+// o Duration
+// o Actors
+// o Average user rating (x/5 stars)
+
+//set interface for data
+//   interface Product {
+//     name: string;
+//     price: number;
+//     description: string;
+// }
+
+// const products: Product[];
+
+// I would recommend using the Array<T> form if the item type is very large : Array<{name: string, price: number, description: string}>
 
 const data = [
   {
     key: "1",
-    firstName: "John",
-    lastName: "Brown",
+    name: "John Brown",
     age: 32,
     address: "New York No. 1 Lake Park",
-    tags: ["nice", "developer"],
+    index: 0,
   },
   {
     key: "2",
-    firstName: "Jim",
-    lastName: "Green",
+    name: "Jim Green",
     age: 42,
     address: "London No. 1 Lake Park",
-    tags: ["loser"],
+    index: 1,
   },
   {
     key: "3",
-    firstName: "Joe",
-    lastName: "Black",
+    name: "Joe Black",
     age: 32,
     address: "Sidney No. 1 Lake Park",
-    tags: ["cool", "teacher"],
+    index: 2,
   },
 ];
 
+const SortableItem = SortableElement((props: any) => <tr {...props} />);
+const SortableContainerComponent = SortableContainer((props: any) => (
+  <tbody {...props} />
+));
+
 export interface IDashBoardComponentProps {}
 
-export interface IDashBoardComponentState {}
+export interface IData {
+  key: string;
+  name: string;
+  age: number;
+  address: string;
+  index: number;
+  // tags: string[];
+}
+
+// use interface for data
+export interface IDashBoardComponentState {
+  dataSource: IData[];
+}
 
 // const {
 //     data,
@@ -41,43 +102,58 @@ export interface IDashBoardComponentState {}
 //     error,
 // } = useQuery<GetAlreadyRated>(GET_MOVIE_ALREADY_RATED, {variables: {movieId: props.movie.id}});
 
-const DashBoardComponent = (props: IDashBoardComponentProps) => {
+const DashBoardComponent: FC<IDashBoardComponentProps> = (props) => {
+  const [state, setstate] = useState({
+    dataSource: data,
+  });
+
+  const onSortEnd = ({ oldIndex, newIndex }: any) => {
+    const { dataSource } = state;
+    if (oldIndex !== newIndex) {
+      const newData = arrayMove(
+        // [].concat(dataSource),
+        [...data],
+        oldIndex,
+        newIndex,
+      ).filter((el) => !!el);
+      console.log("Sorted items: ", newData, oldIndex, newIndex);
+      setstate({ dataSource: newData });
+    }
+  };
+
+  const DraggableBodyRow = ({ className, style, ...restProps }: any) => {
+    const { dataSource } = state;
+    // function findIndex base on Table rowKey props and should always be a right array index
+    const index = dataSource.findIndex(
+      (x: any) => x.index === restProps["data-row-key"],
+    );
+    return <SortableItem index={index} {...restProps} />;
+  };
+
+  const { dataSource } = state;
+  const DraggableContainer = (props: any) => (
+    <SortableContainerComponent
+      useDragHandle
+      helperClass="row-dragging"
+      onSortEnd={onSortEnd}
+      {...props}
+    />
+  );
+
   return (
     <>
-      <div className=" table-responsive ">
-        <Table dataSource={data}>
-          <ColumnGroup title="Name">
-            <Column title="First Name" dataIndex="firstName" key="firstName" />
-            <Column title="Last Name" dataIndex="lastName" key="lastName" />
-          </ColumnGroup>
-          <Column title="Age" dataIndex="age" key="age" />
-          <Column title="Address" dataIndex="address" key="address" />
-          <Column
-            title="Tags"
-            dataIndex="tags"
-            key="tags"
-            render={(tags: string[]) => (
-              <>
-                {tags.map((tag) => (
-                  <Tag color="blue" key={tag}>
-                    {tag}
-                  </Tag>
-                ))}
-              </>
-            )}
-          />
-          <Column
-            title="Action"
-            key="action"
-            render={(text, record) => (
-              <Space size="middle">
-                <a>Invite </a>
-                <a>Delete</a>
-              </Space>
-            )}
-          />
-        </Table>
-      </div>
+      <Table
+        pagination={false}
+        dataSource={dataSource}
+        columns={columns}
+        rowKey="index"
+        components={{
+          body: {
+            wrapper: DraggableContainer,
+            row: DraggableBodyRow,
+          },
+        }}
+      />
     </>
   );
 };
