@@ -1,11 +1,11 @@
 import React, { FC, useState } from "react";
-import { Table, Tag, Space } from "antd";
+import { Table, Tag, Space, Rate } from "antd";
 import {
   SortableContainer,
   SortableElement,
   SortableHandle,
 } from "react-sortable-hoc";
-import { MenuOutlined } from "@ant-design/icons";
+import { MenuOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import arrayMove from "array-move";
 
 const DragHandle = SortableHandle(() => (
@@ -14,7 +14,7 @@ const DragHandle = SortableHandle(() => (
 
 const columns = [
   {
-    title: "Sort",
+    title: "Drag n'Drop",
     dataIndex: "sort",
     width: 30,
     className: "drag-visible",
@@ -26,34 +26,57 @@ const columns = [
     className: "drag-visible",
   },
   {
-    title: "Age",
-    dataIndex: "age",
+    title: "Release Date",
+    dataIndex: "releaseDate",
+    sorter: (a: any, b: any) => a.releaseDate - b.releaseDate,
   },
   {
-    title: "Address",
-    dataIndex: "address",
+    title: "Duration",
+    dataIndex: "duration",
   },
+
   {
-    title: "Tags",
-    key: "tags",
-    dataIndex: "tags",
-    render: (tags: any) => (
+    title: "Actors",
+    key: "actors",
+    dataIndex: "actors",
+    render: (actors: any) => (
       <>
-        {tags.map((tag: any) => (
-          <Tag color="blue" key={tag}>
-            {tag}
+        {actors.map((actor: any) => (
+          <Tag color="blue" key={actor}>
+            {actor}
           </Tag>
         ))}
       </>
     ),
   },
   {
+    title: "Average Ratings",
+    dataIndex: "ratings",
+    render: (ratings: number) => {
+      return (
+        <>
+          <Rate
+            disabled
+            allowHalf
+            defaultValue={ratings}
+            onChange={(e) => console.log(e, "ratings change")}
+          />
+          <p>Rated by 20 Users </p>
+        </>
+      );
+    },
+  },
+  {
     title: "Action",
     key: "action",
     render: (text: string, record: any) => (
       <Space size="middle">
-        <a>Invite </a>
-        <a>Delete </a>
+        <a>
+          <EditOutlined />{" "}
+        </a>
+        <a>
+          <DeleteOutlined />{" "}
+        </a>
       </Space>
     ),
   },
@@ -79,28 +102,31 @@ const columns = [
 
 const data = [
   {
-    key: "1",
+    // key: "1",
     name: "John Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park",
-    index: 0,
-    tags: ["nice", "developer"],
+    releaseDate: "19/02/2020",
+    duration: 25,
+    index: "5f317e3f1b219bc22abfbc11",
+    actors: ["Randy bookeer", "Peeter parkeer", "Peearkeer"],
+    ratings: 3.5,
   },
   {
-    key: "2",
-    name: "Jim Green",
-    age: 42,
-    address: "London No. 1 Lake Park",
-    index: 1,
-    tags: ["nice", "developer"],
+    // key: "2",
+    name: "John Brown",
+    releaseDate: "13/12/2020",
+    duration: 3452,
+    index: "2f317e3f1b219bc22abfbc11",
+    actors: ["Randy bookeer", "Peeter parkeer"],
+    ratings: 2.5,
   },
   {
-    key: "3",
-    name: "Joe Black",
-    age: 32,
-    address: "Sidney No. 1 Lake Park",
-    index: 2,
-    tags: ["nice", "developer"],
+    // key: "3",
+    name: "John Brown",
+    releaseDate: "13/12/2020",
+    duration: 3452,
+    index: "3f317e3f1b219bc22abfbc11",
+    actors: ["Randy bookeer", "Peeter parkeer"],
+    ratings: 2.5,
   },
 ];
 
@@ -172,6 +198,7 @@ const DashBoardComponent: FC<IDashBoardComponentProps> = (props) => {
   return (
     <>
       <Table
+        onChange={(e) => console.log(e)}
         pagination={false}
         dataSource={dataSource}
         columns={columns}
