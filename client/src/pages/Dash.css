@@ -24,3 +24,7 @@
 .row-dragging .drag-visible {
   visibility: visible;
 }
+
+.ant-layout-header {
+  height: auto !important;
+}

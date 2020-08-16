@@ -85,12 +85,13 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache,
 });
 
-console.log(cache);
+//console.log(cache);
 
 cache.writeQuery({
   query: IS_LOGGED_IN,
   data: {
     isLoggedIn: !!localStorage.getItem("token"),
+    // isLoggedIn: localStorage.getItem("token") ? true : false,
   },
 });
 

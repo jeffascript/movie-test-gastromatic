@@ -1,6 +1,11 @@
 import React, { useState, useCallback, FC } from "react";
-import { ApolloClient, useApolloClient, useMutation } from "@apollo/client";
-import { USER_LOGIN } from "../graphAPIs";
+import {
+  ApolloClient,
+  useApolloClient,
+  useMutation,
+  useQuery,
+} from "@apollo/client";
+import { USER_LOGIN, IS_LOGGED_IN } from "../graphAPIs";
 
 import { Spin } from "antd";
 
@@ -25,12 +30,15 @@ const LoginComponent: FC<ILoginCompProps> = (props) => {
 
   const history = useHistory();
   const client: ApolloClient<any> = useApolloClient();
+  const { data } = useQuery<{ isLoggedIn: boolean }>(IS_LOGGED_IN);
 
   const [login, { loading, error }] = useMutation(USER_LOGIN, {
     onCompleted({ login }) {
       console.log(login);
 
       localStorage.setItem("token", login.token);
+
+      console.log(data?.isLoggedIn, "before write");
 
       client.writeQuery({
         query: USER_LOGIN,
@@ -39,6 +47,7 @@ const LoginComponent: FC<ILoginCompProps> = (props) => {
         },
       });
 
+      console.log(data?.isLoggedIn, "after write");
       history.push("/gastromovies");
     },
   });

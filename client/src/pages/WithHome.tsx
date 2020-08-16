@@ -10,27 +10,25 @@ const withHome = (PropComponent: any) => {
       <>
         <Layout>
           <Header>
-            <Row>
-              <Col>
-                <h1 className="center" style={{ color: "gray" }}>
-                  Welcome to GastroMovie Gallery!
-                </h1>
-              </Col>
-            </Row>
+            <div className="container p-3">
+              <h1 style={{ color: "gray", textAlign: "center" }}>
+                Welcome to GastroMovie Gallery!
+              </h1>
+            </div>
           </Header>
           <Content>
-            <div className="container">
-              <div className="row">
+            <div className="container ">
+              {/* <div className="row">
                 <div className="col">
                   <PropComponent {...props} />
                 </div>
-              </div>
+              </div> */}
 
-              {/* <div className="centertitle">
-                    <div className="center">
-                      <PropComponent {...props} />
-                    </div>
-                  </div> */}
+              <div className="centertitle">
+                <div className="center">
+                  <PropComponent {...props} />
+                </div>
+              </div>
             </div>
           </Content>
         </Layout>

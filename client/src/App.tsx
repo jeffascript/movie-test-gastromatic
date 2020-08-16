@@ -18,7 +18,8 @@ const App: FC<IAppProps> = (props): JSX.Element => {
   const { data } = useQuery(IS_LOGGED_IN);
 
   const defaultProtectedRouteProps: ProtectedRouteProps = {
-    isAuthenticated: data.isLoggedIn, //!! isAuthenticated,
+    // isAuthenticated: data.isLoggedIn, //!! isAuthenticated,
+    isAuthenticated: !!localStorage.getItem("token"),
     authenticationPath: "/login",
     isAllowed: false,
     restrictedPath: "",

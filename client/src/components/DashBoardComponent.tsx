@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { Table } from "antd";
+import { Table, Tag, Space } from "antd";
 import {
   SortableContainer,
   SortableElement,
@@ -33,6 +33,30 @@ const columns = [
     title: "Address",
     dataIndex: "address",
   },
+  {
+    title: "Tags",
+    key: "tags",
+    dataIndex: "tags",
+    render: (tags: any) => (
+      <>
+        {tags.map((tag: any) => (
+          <Tag color="blue" key={tag}>
+            {tag}
+          </Tag>
+        ))}
+      </>
+    ),
+  },
+  {
+    title: "Action",
+    key: "action",
+    render: (text: string, record: any) => (
+      <Space size="middle">
+        <a>Invite </a>
+        <a>Delete </a>
+      </Space>
+    ),
+  },
 ];
 // Name
 // o Release date
@@ -51,6 +75,8 @@ const columns = [
 
 // I would recommend using the Array<T> form if the item type is very large : Array<{name: string, price: number, description: string}>
 
+//TODO: Add rating in data below as number... then show the number with the icon  index value+1
+
 const data = [
   {
     key: "1",
@@ -58,6 +84,7 @@ const data = [
     age: 32,
     address: "New York No. 1 Lake Park",
     index: 0,
+    tags: ["nice", "developer"],
   },
   {
     key: "2",
@@ -65,6 +92,7 @@ const data = [
     age: 42,
     address: "London No. 1 Lake Park",
     index: 1,
+    tags: ["nice", "developer"],
   },
   {
     key: "3",
@@ -72,6 +100,7 @@ const data = [
     age: 32,
     address: "Sidney No. 1 Lake Park",
     index: 2,
+    tags: ["nice", "developer"],
   },
 ];
 
@@ -88,7 +117,7 @@ export interface IData {
   age: number;
   address: string;
   index: number;
-  // tags: string[];
+  tags: string[];
 }
 
 // use interface for data
