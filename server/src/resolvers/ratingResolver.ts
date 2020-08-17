@@ -46,7 +46,19 @@ export const rateTheMovie = async (
   //   throw new Error("Movie already rated by you!");
   // }
 
-  const rating: IRating = new RatingsModel({
+  // const rating: IRating = new RatingsModel({
+  //   count,
+  //   comment,
+  //   movie,
+  //   ratedBy: user,
+  //   isRatedByUser: true,
+  // });
+
+  // await rating.save();
+  // movie.ratings.push(rating);
+  // await movie.save();
+
+  const rating: IRating = await RatingsModel.create({
     count,
     comment,
     movie,
@@ -54,9 +66,11 @@ export const rateTheMovie = async (
     isRatedByUser: true,
   });
 
-  await rating.save();
-  movie.ratings.push(rating);
-  await movie.save();
+  await MoviesModel.findByIdAndUpdate(movieId, {
+    $addToSet: {
+      ratings: rating,
+    },
+  });
 
   await pubSub.publish("newRatingAlert", {
     newRatingAlert: rating,

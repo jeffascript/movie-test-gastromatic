@@ -1,4 +1,3 @@
-import { oneMovie } from "./../../../server/src/resolvers/movieResolver";
 import { gql } from "@apollo/client";
 
 export const GET_MOVIES = gql`

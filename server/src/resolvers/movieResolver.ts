@@ -11,7 +11,12 @@ import {
 const allMovies = async (_: void): Promise<IMovieResultDesign[]> => {
   const moviesFromDB: IMovie[] = await MoviesModel.find({})
     .populate("actorsArray")
-    .populate({ path: "ratings.ratedBy" });
+    .populate({
+      path: "ratings",
+      populate: {
+        path: "ratedBy",
+      },
+    });
 
   return reMappedResponse(moviesFromDB);
 };
@@ -22,7 +27,12 @@ export const oneMovie = async (
 ): Promise<IMovieResultDesign> => {
   const movie: MovieOrNull = await MoviesModel.findById(args.id)
     .populate("actorsArray")
-    .populate({ path: "ratings.ratedBy" });
+    .populate({
+      path: "ratings",
+      populate: {
+        path: "ratedBy",
+      },
+    });
   if (movie === null) {
     throw new Error("Movie does not exist!");
   }

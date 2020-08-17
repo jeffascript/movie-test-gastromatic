@@ -8,105 +8,28 @@ import {
 import { MenuOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import arrayMove from "array-move";
 
-const DragHandle = SortableHandle(() => (
-  <MenuOutlined style={{ cursor: "pointer", color: "#999" }} />
-));
+export interface IDashBoardComponentProps {}
 
-const columns = [
-  {
-    title: "Drag n'Drop",
-    dataIndex: "sort",
-    width: 30,
-    className: "drag-visible",
-    render: () => <DragHandle />,
-  },
-  {
-    title: "Name",
-    dataIndex: "name",
-    className: "drag-visible",
-  },
-  {
-    title: "Release Date",
-    dataIndex: "releaseDate",
-    sorter: (a: any, b: any) => a.releaseDate - b.releaseDate,
-  },
-  {
-    title: "Duration",
-    dataIndex: "duration",
-  },
+export interface IData {
+  key: string;
+  name: string;
+  age: number;
+  address: string;
+  index: number;
+  tags: string[];
+}
 
-  {
-    title: "Actors",
-    key: "actors",
-    dataIndex: "actors",
-    render: (actors: any) => (
-      <>
-        {actors.map((actor: any) => (
-          <Tag color="blue" key={actor}>
-            {actor}
-          </Tag>
-        ))}
-      </>
-    ),
-  },
-  {
-    title: "Average Ratings",
-    dataIndex: "ratings",
-    render: (ratings: number) => {
-      return (
-        <>
-          <Rate
-            disabled
-            allowHalf
-            defaultValue={ratings}
-            onChange={(e) => console.log(e, "ratings change")}
-          />
-          <p>Rated by 20 Users </p>
-        </>
-      );
-    },
-  },
-  {
-    title: "Action",
-    key: "action",
-    render: (text: string, record: any) => (
-      <Space size="middle">
-        <a>
-          <EditOutlined />{" "}
-        </a>
-        <a>
-          <DeleteOutlined />{" "}
-        </a>
-      </Space>
-    ),
-  },
-];
-// Name
-// o Release date
-// o Duration
-// o Actors
-// o Average user rating (x/5 stars)
-
-//set interface for data
-//   interface Product {
-//     name: string;
-//     price: number;
-//     description: string;
-// }
-
-// const products: Product[];
-
-// I would recommend using the Array<T> form if the item type is very large : Array<{name: string, price: number, description: string}>
-
-//TODO: Add rating in data below as number... then show the number with the icon  index value+1
-
+// use interface for data
+export interface IDashBoardComponentState {
+  dataSource: IData[];
+}
 const data = [
   {
     // key: "1",
     name: "John Brown",
     releaseDate: "19/02/2020",
     duration: 25,
-    index: "5f317e3f1b219bc22abfbc11",
+    index: "5f317e3f1b219bc22abfbc11", //use ID
     actors: ["Randy bookeer", "Peeter parkeer", "Peearkeer"],
     ratings: 3.5,
   },
@@ -130,37 +53,119 @@ const data = [
   },
 ];
 
-const SortableItem = SortableElement((props: any) => <tr {...props} />);
-const SortableContainerComponent = SortableContainer((props: any) => (
-  <tbody {...props} />
-));
-
-export interface IDashBoardComponentProps {}
-
-export interface IData {
-  key: string;
-  name: string;
-  age: number;
-  address: string;
-  index: number;
-  tags: string[];
-}
-
-// use interface for data
-export interface IDashBoardComponentState {
-  dataSource: IData[];
-}
-
-// const {
-//     data,
-//     loading,
-//     error,
-// } = useQuery<GetAlreadyRated>(GET_MOVIE_ALREADY_RATED, {variables: {movieId: props.movie.id}});
+type orderForDuration = "ascend" | "descend" | null | undefined;
 
 const DashBoardComponent: FC<IDashBoardComponentProps> = (props) => {
   const [state, setstate] = useState({
     dataSource: data,
   });
+
+  const [direction, setDirection] = useState<orderForDuration>();
+
+  const DragHandle = SortableHandle(() => (
+    <MenuOutlined style={{ cursor: "pointer", color: "#999" }} />
+  ));
+
+  const columns = [
+    {
+      title: "Drag n'Drop",
+      dataIndex: "sort",
+      width: 30,
+      className: "drag-visible",
+      render: () => <DragHandle />,
+    },
+    {
+      title: "Name",
+      dataIndex: "name",
+      className: "drag-visible",
+    },
+    {
+      title: "Release Date",
+      dataIndex: "releaseDate",
+    },
+    {
+      title: "Duration",
+      dataIndex: "duration",
+      sorter: (a: any, b: any) => a.duration - b.duration,
+      sortOrder: direction,
+      showSorterTooltip: true,
+    },
+
+    {
+      title: "Actors",
+      key: "actors",
+      dataIndex: "actors",
+      render: (actors: any) => (
+        <>
+          {actors.map((actor: any) => (
+            <Tag color="blue" key={actor}>
+              {actor}
+            </Tag>
+          ))}
+        </>
+      ),
+    },
+    {
+      title: "Average Ratings",
+      dataIndex: "ratings",
+      render: (ratings: number) => {
+        return (
+          <>
+            <Rate
+              disabled
+              allowHalf
+              defaultValue={ratings}
+              onChange={(e) => console.log(e, "ratings change")}
+            />
+            <p>Rated by 20 Users </p>
+          </>
+        );
+      },
+    },
+    {
+      title: "Action",
+      key: "action",
+      render: (text: string, record: any) => (
+        <Space size="middle">
+          <a>
+            <EditOutlined />{" "}
+          </a>
+          <a>
+            <DeleteOutlined />{" "}
+          </a>
+        </Space>
+      ),
+    },
+  ];
+  // Name
+  // o Release date
+  // o Duration
+  // o Actors
+  // o Average user rating (x/5 stars)
+
+  //set interface for data
+  //   interface Product {
+  //     name: string;
+  //     price: number;
+  //     description: string;
+  // }
+
+  // const products: Product[];
+
+  // I would recommend using the Array<T> form if the item type is very large : Array<{name: string, price: number, description: string}>
+
+  //TODO: Add rating in data below as number... then show the number with the icon  index value+1
+
+  const SortableItem = SortableElement((props: any) => <tr {...props} />);
+  const SortableContainerComponent = SortableContainer((props: any) => (
+    <tbody {...props} />
+  ));
+
+  // const {
+  //     data,
+  //     loading,
+  //     error,
+  // } = useQuery<GetAlreadyRated>(GET_MOVIE_ALREADY_RATED, {variables: {movieId: props.movie.id}});
 
   const onSortEnd = ({ oldIndex, newIndex }: any) => {
     const { dataSource } = state;
@@ -198,10 +203,13 @@ const DashBoardComponent: FC<IDashBoardComponentProps> = (props) => {
   return (
     <>
       <Table
-        onChange={(e) => console.log(e)}
+        onChange={(pagination, filters, sorter: any, extra) => (
+          console.log(sorter), setDirection(sorter.order)
+        )}
         pagination={false}
         dataSource={dataSource}
         columns={columns}
+        sortDirections={["descend", "ascend", "descend"]}
         rowKey="index"
         components={{
           body: {

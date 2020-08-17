@@ -5,6 +5,7 @@ import { ApolloServer } from "apollo-server";
 import { getUserInfo } from "./auth";
 import typeDefs from "./schema";
 import resolvers from "./resolvers";
+import { populateData } from "./data/dbPopulate";
 
 const args = yargs.option("mongo-uri", {
   describe: "Mongo URI",
@@ -19,7 +20,7 @@ async function start() {
       useUnifiedTopology: true,
       useNewUrlParser: true,
     });
-    //await populateData();
+    await populateData();
     console.log("Connected to DB.");
 
     await new ApolloServer({
