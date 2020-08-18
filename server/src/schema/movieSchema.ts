@@ -7,6 +7,7 @@ const typeDef = gql`
     releaseDate: String!
     durationPerSecond: Int!
     actorsArray: [Actor!]!
+    ratedByUser: Boolean
     ratings: [Rating]!
     numberOfRatings: Int!
     ratingsAverage: Float!

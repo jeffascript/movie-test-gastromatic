@@ -13,6 +13,7 @@ export const formatMovieResponse = (movie: IMovie): IMovieResultDesign => {
     releaseDate: movie.releaseDate,
     actorsArray: movie.actorsArray,
     ratings: movie.ratings,
+    //ratedByUser: movie.ratings.some((a) => a.ratedBy.id === users._id),
 
     ratingsAverage: movie.ratings
       .map((rating) => rating.count)
