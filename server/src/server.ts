@@ -20,6 +20,7 @@ async function start() {
       useUnifiedTopology: true,
       useNewUrlParser: true,
     });
+    // .then(() => populateData());
     await populateData();
     console.log("Connected to DB.");
 

@@ -30,23 +30,31 @@ export const formatMovieResponse = (movie: IMovie): IMovieResultDesign => {
 export const actorMappingToDB = async (
   nameOfActor: string[],
 ): Promise<IActor[]> => {
-  const newActorArray: IActor[] = [];
+  let newActorArray: IActor[] = [];
+  console.log("1st", typeof newActorArray);
 
-  nameOfActor.forEach(async (oneActor) => {
+  // nameOfActor.forEach(async (oneActor) => //foreach fires before the promise is resolved,hnc we us for..of or Map but with Promise.all
+  for (const oneActor of nameOfActor) {
     let actorInDB: IActor | null = await ActorsModel.findOne({
       name: oneActor,
     });
 
     if (actorInDB !== null) {
-      newActorArray.push(actorInDB);
+      //console.log(actorInDB);
+      newActorArray = [...newActorArray, actorInDB];
+      //newActorArray.push(actorInDB);
+      //console.log("existing", newActorArray);
     } else {
       let newActor: IActor = new ActorsModel({
         name: oneActor,
       });
       await newActor.save();
-      newActorArray.push(newActor);
+      newActorArray = [...newActorArray, newActor];
+      // newActorArray.push(newActor);
+      // console.log("NON existing", newActorArray);
     }
-  });
+  }
+  console.log("last", newActorArray);
 
   return newActorArray;
 };

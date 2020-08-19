@@ -21,24 +21,23 @@ export const populateData = async () => {
     // const rand = Math.floor(Math.random() * 5) + 1;
     let aMovie: any;
     let movieForRating: any;
-    movieData.map(async (data) => {
+    movieData.forEach(async (data) => {
       aMovie = await createMovie(undefined, { ...data }, context);
-      if (aMovie.name === "Crouching Tiger, Hidden Dragon") {
+      if (aMovie.name === "Tiger King") {
         movieForRating = aMovie._id;
+        await rateTheMovie(
+          undefined,
+          {
+            movieId: aMovie._id,
+            count: 3,
+            comment: "I rated this movie first ....yihaoooo!!",
+          },
+          context,
+        );
+        console.log(movieForRating, "rating");
         return;
       }
     });
-    console.log(aMovie);
-
-    await rateTheMovie(
-      undefined,
-      {
-        movieId: movieForRating,
-        count: 3,
-        comment: "I rated this movie first ....yihaoooo!!",
-      },
-      context,
-    );
   } catch (error) {
     console.log(error);
   }
